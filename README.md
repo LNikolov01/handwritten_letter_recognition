@@ -131,5 +131,8 @@ dataset:
     - "Normalize pixel values to range [0,1]"
 ```
 
-### **📜 License**
-📜 This project is open-source and licensed under the **Apache License**.
+## **Planned Future Improvements**
+- ✅ Data augmentation to improve generalization
+- ✅ Model training script for custom datasets
+- ✅ Web-based interface with Flask
+- ✅ Deployment as a web app
