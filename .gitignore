@@ -22,5 +22,5 @@ Thumbs.db
 .idea/
 *.sublime-workspace
 
-# Datasets
+# Ignore Datasets
 models/data/
