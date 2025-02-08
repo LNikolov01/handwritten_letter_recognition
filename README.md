@@ -131,23 +131,23 @@ dataset:
     - "Normalize pixel values to range [0,1]"
 ```
 
-## **🔍 Challenges Faced*
+## **🔍 Challenges Faced**
 During development, I faced multiple challenges and worked through them systematically:
 
-### **1️⃣ Incorrect Letter Orientation**
+### **Incorrect Letter Orientation**
 ❌ **Problem:** The EMNIST dataset stores images **rotated 90° clockwise and mirrored**  
 ✅ **Solution:** Applied **-90° counterclockwise rotation and horizontal flipping** to correct alignment.  
 
-### **2️⃣ Real-World Testing Was Inaccurate**
+### **Real-World Testing Was Inaccurate**
 ❌ **Problem:** The model performed well on EMNIST but failed with real drawn letters.  
 ✅ **Solution:** Improved **image preprocessing** with OpenCV to better match the EMNIST format.  
 
-### **3️⃣ J ↔ L Misclassification**
+### **J ↔ L Misclassification**
 ❌ **Problem:** The model confused "J" and "L" due to dataset quirks.  
 ✅ **Solution:** Verified EMNIST mappings, adjusted the training process, and fine-tuned the preprocessing.  
 
-### **4️⃣ Optimizing Model Generalization**
-❌ **Problem:** Severe overfitting occurred in early training stages.  
+### **Optimizing Model Generalization**
+❌ **Problem:** Severe overfitting occurred in the early training stages.  
 ✅ **Solution:** Used **dropout layers**, **batch normalization**, and **learning rate decay** to improve performance.  
 
 ## **Planned Future Improvements**
