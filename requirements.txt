@@ -1,0 +1,14 @@
+# Core Libraries
+numpy
+pandas
+matplotlib
+
+# Machine Learning & Deep Learning Libs
+tensorflow
+torch
+torchvision
+scikit-learn
+
+# Image Processing
+opencv-python
+pillow
