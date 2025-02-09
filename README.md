@@ -159,7 +159,6 @@ During development, I faced multiple challenges and worked through them systemat
 - **Solution:** Implemented **EarlyStopping**, monitoring the validation loss and halting the training when it stops improving, ensuring the model retains its best performance.
 
 ## **Planned Future Improvements**
-- ✅ Data augmentation to improve generalization
 - ✅ Model training script for custom datasets
 - ✅ Web-based interface with Flask
 - ✅ Deployment as a web app
