@@ -5,7 +5,7 @@ import tensorflow as tf
 import string
 from preprocessing.process_image import preprocess_image
 
-MODEL_PATH = "models/cnn_model_letters.h5"  # Updated to use letter model
+MODEL_PATH = "models/cnn_model_letters.h5"  # Use letter recognition ML model
 
 def load_model():
     return tf.keras.models.load_model(MODEL_PATH)
@@ -49,18 +49,18 @@ if __name__ == "__main__":
     # Predict the letter
     predicted_letter, confidence = predict_letter(IMAGE_PATH, model)
 
-    # Display the results in terminal
+    # Display the results in the terminal
     print(f"Predicted Letter: {predicted_letter}")
     print(f"Confidence: {confidence * 100:.2f}%")  # Converted to percentage format
 
     # Create a blank white image
     img = np.ones((200, 200, 3), dtype=np.uint8) * 255
 
-    # Display the predicted letter
+    # Display the predicted letter inside
     font = cv2.FONT_HERSHEY_SIMPLEX
     cv2.putText(img, predicted_letter, (60, 120), font, 3, (0, 0, 0), 5, cv2.LINE_AA)
 
-    # Show the window with the predicted letter
+    # Show a window with the predicted letter
     cv2.imshow("Predicted Letter", img)
     cv2.waitKey(3000)  # Display for 3 seconds
     cv2.destroyAllWindows()

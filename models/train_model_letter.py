@@ -6,22 +6,32 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout, LeakyReLU
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.regularizers import l2
-from tensorflow.keras.callbacks import ReduceLROnPlateau
+from tensorflow.keras.callbacks import ReduceLROnPlateau, EarlyStopping
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report
 import string
 
-# Fix Image Rotation for EMNIST
-transform = transforms.Compose([
+# Slight Data Augmentation for Training Set
+train_transform = transforms.Compose([
+    transforms.RandomAffine(degrees=6, translate=(0.05, 0.05), scale=(0.98, 1.02)),  # Rotations, shifts, scaling
+    transforms.RandomApply([transforms.ElasticTransform(alpha=2.0)], p=0.2),  # Light elastic deformation
+    transforms.RandomApply([transforms.GaussianBlur(kernel_size=3)], p=0.05),  # Very low probability Gaussian noice
+    transforms.ToTensor(),
+    transforms.Lambda(lambda x: torch.rot90(x, k=1, dims=[1, 2])),  # Fix EMNIST rotation
+    transforms.Lambda(lambda x: torch.flip(x, dims=[1])),  # Flip horizontally
+])
+
+# Fix Image Rotation for EMNIST validation set
+val_transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Lambda(lambda x: torch.rot90(x, k=1, dims=[1, 2])),  # Ensure correct orientation
     transforms.Lambda(lambda x: torch.flip(x, dims=[1]))  # Flip Horizontally
 ])
 
 # Load EMNIST dataset
-train_dataset = torchvision.datasets.EMNIST(root="./data", split="letters", train=True, download=True, transform=transform)
-test_dataset = torchvision.datasets.EMNIST(root="./data", split="letters", train=False, download=True, transform=transform)
+train_dataset = torchvision.datasets.EMNIST(root="./data", split="letters", train=True, download=True, transform=train_transform)
+test_dataset = torchvision.datasets.EMNIST(root="./data", split="letters", train=False, download=True, transform=val_transform)
 
 # Convert dataset to NumPy arrays
 x_train, y_train = zip(*train_dataset)
@@ -63,7 +73,7 @@ model = Sequential([
     Flatten(),
     Dense(512, kernel_initializer='he_normal'),
     LeakyReLU(alpha=0.1),
-    Dropout(0.3),  # Reduced dropout
+    Dropout(0.4),
     Dense(26, activation='softmax')  # 26 Classes for A-Z
 ])
 
@@ -73,14 +83,17 @@ optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 model.compile(optimizer=optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
 
 # Reduce Learning Rate if Validation Loss Stops Improving
-lr_scheduler = ReduceLROnPlateau(monitor="val_loss", patience=2, factor=0.5, min_lr=1e-5)
+lr_scheduler = ReduceLROnPlateau(monitor="val_loss", patience=1, factor=0.5, min_lr=1e-5)
+
+# Early Stopping to prevent overfitting
+early_stop = EarlyStopping(monitor="val_loss", patience=4, restore_best_weights=True, verbose=1)
 
 # Train the Model
 history = model.fit(x_train, y_train,
                     validation_data=(x_test, y_test),
                     batch_size=64,
-                    epochs=20,
-                    callbacks=[lr_scheduler])
+                    epochs=30,
+                    callbacks=[lr_scheduler, early_stop])
 
 # Save Model
 model.save("cnn_model_letters.h5")
