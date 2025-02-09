@@ -113,7 +113,7 @@ model:
     - Conv2D: {filters: 256, kernel_size: [3,3], activation: "LeakyReLU", kernel_initializer: "he_normal"}
     - Flatten: {}
     - Dense: {units: 512, activation: "LeakyReLU", kernel_initializer: "he_normal"}
-    - Dropout: {rate: 0.4}  # Increased to prevent overfitting
+    - Dropout: {rate: 0.4}
     - Dense: {units: 26, activation: "softmax"}
 training:
   optimizer: "adam"
@@ -138,25 +138,23 @@ dataset:
 ## **🔍 Challenges Faced**
 During development, I faced multiple challenges and worked through them systematically:
 
-### **Incorrect Letter Orientation**
-❌ **Problem:** The EMNIST dataset stores images **rotated 90° clockwise and mirrored**  
-✅ **Solution:** Applied **-90° counterclockwise rotation and horizontal flipping** to correct alignment.  
+### 1️⃣ **Data Preprocessing & Orientation Correction**
+**Challenge:** The EMNIST dataset stores images **rotated 90° clockwise and mirrored**, leading to incorrect predictions.**Solution:** Implemented **custom preprocessing** steps, including **-90° counterclockwise rotation and horizontal flipping**, ensuring correct letter alignment before feeding images into the model.
 
-### **Real-World Testing Was Inaccurate**
-❌ **Problem:** The model performed well on EMNIST but failed with real drawn letters.  
-✅ **Solution:** Improved **image preprocessing** with OpenCV to better match the EMNIST format and introduced **slight augmentations** to the training set.  
+### 2️⃣ **Adapting the Model for Real-World Handwriting**
+**Challenge:** The model performed well on EMNIST but struggled with real-world handwritten input due to dataset bias.**Solution:** Introduced **data augmentation** by incorporating **elastic transformations, Gaussian blur, and minor affine variations, improving the model's ability to generalize** to different handwriting styles.
 
-### **J ↔ L and O ↔ Q Misclassification**
-❌ **Problem:** The model confused simillar letters such as "J" and "L" due to dataset quirks.  
-✅ **Solution:** Verified EMNIST mappings, adjusted the training process, and fine-tuned the preprocessing.  
+### 3️⃣ **Addressing Misclassification of Similar Letters (I, L, G, Q)**
+**Challenge:** The model frequently misclassified similar-looking letters, such as **I vs. L** and **G vs. Q**.
+**Solution:** Introduced **targeted data augmentation**, including **slight rotational adjustments for I and L**.
 
-### **Optimizing Model Generalization**
-❌ **Problem:** Severe overfitting occurred in the early training stages.  
-✅ **Solution:** Used **dropout layers**, **batch normalization**, and **learning rate decay** to improve performance.
+### 4️⃣ **Overfitting Prevention & Model Optimization**
+**Challenge:** The model started overfitting after **~9 epochs**, reducing its generalization capability.
+**Solution:** Tuned **dropout layers (0.4), earlier ReduceLROnPlateau activation, and batch size adjustments**, leading to better performance on unseen data.
 
-### **Overfitting Prevention**
-❌ **Problem:** The model began overfitting after ~9 epochs.
-✅ **Solution:** Adjusted dropout rate (0.4), ReduceLROnPlateau and EarlyStopping triggers, and slight batch size tuning to improve generalization.
+### 5️⃣ **Early Stopping for Efficient Training**
+**Challenge:** The model continued training beyond the optimal point , as finding the optimal epoch count was challenging, leading to unnecessary computations and severe overfitting.
+**Solution:** Implemented **EarlyStopping**, monitoring the validation loss and halting the training when it stops improving, ensuring the model retains its best performance.
 
 ## **Planned Future Improvements**
 - ✅ Data augmentation to improve generalization
