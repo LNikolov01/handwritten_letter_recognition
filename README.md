@@ -7,7 +7,7 @@ A deep learning-powered **handwritten letter recognition** model that allows use
 ✔ Predictions using a **trained Convolutional Neural Network (CNN)**  
 ✔ Model trained on the **EMNIST dataset**  
 
-## **⚙️ Installation**
+## **Installation**
 
 ### **1️⃣ Clone the Repository**
 ```bash
@@ -20,7 +20,7 @@ cd handwritten_letter_recognition
 pip install -r requirements.txt
 ```
 
-## **🚀 Usage**
+## **Usage**
 
 ### **Run the Application**
 ```bash
@@ -36,19 +36,6 @@ Predicted Letter: W
 Confidence: 96.85%
 ```
 
-## **📂 Project Structure**
-```
-handwritten_letter_recognition/
-│── app.py                 # Main application script
-│── test_rotations.py      # A testing script for the preprocessing
-│── train_model_letter.py  # Model training script
-│── draw_letter.py         # Allows users to draw letters
-│── process_image.py       # Image preprocessing for the model
-│── requirements.txt       # Dependencies
-│── cnn_model_letters.h5   # Trained CNN model
-│── README.md              # Project documentation
-```
-
 ## **🧠 Model Details**
 - **Architecture:** Convolutional Neural Network (CNN)  
 - **Dataset:** Trained on the **EMNIST Letters dataset** (28x28 grayscale images)  
@@ -56,7 +43,7 @@ handwritten_letter_recognition/
 
 ## **📊 Model Performance**
 
-### **✅ Test Accuracy & Loss**
+### **Test Accuracy & Loss**
 - **Test Accuracy:** **94.57%**  
 - **Test Loss:** **0.1703**  
 
@@ -135,7 +122,7 @@ dataset:
     - "RandomApply: GaussianBlur(kernel_size=3, p=0.05)"
 ```
 
-## **🔍 Challenges Faced**
+## **Challenges Faced**
 During development, I faced multiple challenges and worked through them systematically:
 
 ### 1️⃣ **Data Preprocessing & Orientation Correction**
